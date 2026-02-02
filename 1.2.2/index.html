@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Makeup Product Filter</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: pink;
+            text-align: center;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .product {
+            background: white;
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            border-radius: 10px;
+        }
+
+        .price {
+            color: darkred;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>💄 Makeup Products</h2>
+
+    <select id="filter" onchange="filterProducts()">
+        <option value="all">All</option>
+        <option value="lipstick">Lipstick</option>
+        <option value="foundation">Foundation</option>
+        <option value="eyeliner">Eyeliner</option>
+    </select>
+
+    <div id="products"></div>
+
+    <script>
+        const products = [
+            { name: "Pink Lipstick", category: "lipstick", price: 499 },
+            { name: "Red Lipstick", category: "lipstick", price: 599 },
+            { name: "Liquid Foundation", category: "foundation", price: 899 },
+            { name: "Cream Foundation", category: "foundation", price: 799 },
+            { name: "Black Eyeliner", category: "eyeliner", price: 299 }
+        ];
+
+        function filterProducts() {
+            const selected = document.getElementById("filter").value;
+            const box = document.getElementById("products");
+            box.innerHTML = "";
+
+            for (let i = 0; i < products.length; i++) {
+                if (selected === "all" || products[i].category === selected) {
+
+                    box.innerHTML += `
+                        <div class="product">
+                            <h4>${products[i].name}</h4>
+                            <p class="price">₹${products[i].price}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // show all products first
+        filterProducts();
+    </script>
+
+</body>
+</html>
