@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simple SVG Drawing Tool</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    text-align: center;
+    font-family: Arial;
+}
+
+svg {
+    width: 95vw;
+    height: 80vh;
+    background: black;
+    border: 3px solid #ff69b4;
+    border-radius: 10px;
+    cursor: crosshair;
+}
+
+button, input {
+    margin: 10px;
+    padding: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<h3>✨ Simple SVG Drawing Tool ✨</h3>
+
+<input type="color" id="color" value="#ff69b4">
+<button onclick="undo()">Undo</button>
+
+<svg id="canvas"></svg>
+
+<script>
+const svg = document.getElementById("canvas");
+const color = document.getElementById("color");
+
+let drawing = false;
+let path;
+
+// Convert mouse position to SVG coordinates
+function getPos(evt) {
+    const rect = svg.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
+}
+
+// Start drawing
+svg.addEventListener("mousedown", (e) => {
+    drawing = true;
+    const p = getPos(e);
+
+    path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", `M ${p.x} ${p.y}`);
+    path.setAttribute("stroke", color.value);
+    path.setAttribute("stroke-width", "4");
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke-linecap", "round");
+
+    svg.appendChild(path);
+});
+
+// Draw
+svg.addEventListener("mousemove", (e) => {
+    if (!drawing) return;
+    const p = getPos(e);
+    path.setAttribute("d", path.getAttribute("d") + ` L ${p.x} ${p.y}`);
+});
+
+// Stop drawing
+svg.addEventListener("mouseup", () => drawing = false);
+svg.addEventListener("mouseleave", () => drawing = false);
+
+// Undo
+function undo() {
+    if (svg.lastChild) {
+        svg.removeChild(svg.lastChild);
+    }
+}
+</script>
+
+</body>
+</html>
