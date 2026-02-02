@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Character Counter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 25px;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            outline: none;
+            resize: none;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #667eea;
+        }
+
+        textarea.error {
+            border-color: #e74c3c;
+        }
+
+        .counter {
+            margin-top: 8px;
+            text-align: right;
+            font-size: 14px;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+
+        .counter.warning {
+            color: #e67e22;
+        }
+
+        .counter.danger {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .error-message {
+            margin-top: 6px;
+            font-size: 13px;
+            color: #e74c3c;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Live Character Counter</h2>
+
+        <textarea id="textInput" maxlength="200"
+            placeholder="Start typing here..."></textarea>
+
+        <div id="counter" class="counter">0 / 200 characters</div>
+        <div id="error" class="error-message">
+            ❌ No more characters can be added!
+        </div>
+    </div>
+
+    <script>
+        const textarea = document.getElementById("textInput");
+        const counter = document.getElementById("counter");
+        const errorMessage = document.getElementById("error");
+        const maxLength = textarea.maxLength;
+
+        textarea.addEventListener("input", () => {
+            const length = textarea.value.length;
+            counter.textContent = `${length} / ${maxLength} characters`;
+
+            // Reset states
+            counter.classList.remove("warning", "danger");
+            textarea.classList.remove("error");
+            errorMessage.style.display = "none";
+
+            // Warning near limit
+            if (length >= maxLength * 0.8 && length < maxLength) {
+                counter.classList.add("warning");
+            }
+
+            // Error at limit
+            if (length === maxLength) {
+                counter.classList.add("danger");
+                textarea.classList.add("error");
+                errorMessage.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
